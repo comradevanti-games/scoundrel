@@ -46,7 +46,7 @@ impl fmt::Display for Card {
 
 impl fmt::Display for Pile {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0.first().unwrap())
+        write!(f, "{}", self.peek_top_card().unwrap())
     }
 }
 
