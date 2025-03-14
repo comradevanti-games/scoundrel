@@ -1,5 +1,4 @@
 use std::fmt::{self};
-use std::io::Write;
 
 use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game, pile::Pile};
@@ -50,6 +49,8 @@ impl fmt::Display for Pile {
     }
 }
 
-pub fn print_game<W: Write>(stdout: &mut W, game: &Game) {
-    write!(stdout, "{}{}", termion::cursor::Goto(2, 2), &game.dungeon).unwrap();
+impl fmt::Display for Game {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}{}", termion::cursor::Goto(2, 2), &self.dungeon)
+    }
 }
