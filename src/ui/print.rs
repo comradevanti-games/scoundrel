@@ -7,13 +7,21 @@ use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game, pile::Pile};
 extern crate termion;
 
+const HEART: char = '♥';
+
+const CLUBS: char = '♣';
+
+const SPADE: char = '♠';
+
+const DIAMOND: char = '◆';
+
 impl fmt::Display for Suite {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Suite::Hearts => write!(f, "{}{}", color::Fg(color::Red), '♥'),
-            Suite::Clubs => write!(f, "{}{}", color::Fg(color::Blue), '♣'),
-            Suite::Spades => write!(f, "{}{}", color::Fg(color::LightBlack), '♠'),
-            Suite::Diamonds => write!(f, "{}{}", color::Fg(color::Yellow), '◆'),
+            Suite::Hearts => write!(f, "{}{}", color::Fg(color::Red), HEART),
+            Suite::Clubs => write!(f, "{}{}", color::Fg(color::Blue), CLUBS),
+            Suite::Spades => write!(f, "{}{}", color::Fg(color::LightBlack), SPADE),
+            Suite::Diamonds => write!(f, "{}{}", color::Fg(color::Yellow), DIAMOND),
         }
         .and(write!(f, "{}", style::Reset))
     }
