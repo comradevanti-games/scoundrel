@@ -2,6 +2,7 @@ use std::io::{Write, stdin, stdout};
 
 use domain::game::Game;
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
+use ui::print::print_game;
 
 extern crate termion;
 
@@ -22,7 +23,7 @@ fn main() {
     let mut rng = rand::rng();
     let game = Game::start_new(&mut rng);
 
-    write!(stdout, "{}", game).unwrap();
+    print_game(&mut stdout, &game).unwrap();
     stdout.flush().unwrap();
 
     for key in stdin.keys() {
