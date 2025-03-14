@@ -10,10 +10,10 @@ extern crate termion;
 impl fmt::Display for Suite {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Suite::Hearts => write!(f, "{}{}", color::Fg(color::Red), "H"),
-            Suite::Clubs => write!(f, "{}{}", color::Fg(color::Blue), "C"),
-            Suite::Spades => write!(f, "{}{}", color::Fg(color::LightBlack), "S"),
-            Suite::Diamonds => write!(f, "{}{}", color::Fg(color::Yellow), "D"),
+            Suite::Hearts => write!(f, "{}{}", color::Fg(color::Red), '♥'),
+            Suite::Clubs => write!(f, "{}{}", color::Fg(color::Blue), '♣'),
+            Suite::Spades => write!(f, "{}{}", color::Fg(color::LightBlack), '♠'),
+            Suite::Diamonds => write!(f, "{}{}", color::Fg(color::Yellow), '◆'),
         }
         .and(write!(f, "{}", style::Reset))
     }
