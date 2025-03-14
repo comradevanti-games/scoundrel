@@ -7,6 +7,7 @@ use super::{card::Rank, pile::Pile};
 #[derive(PartialEq, Debug)]
 pub struct Game {
     pub dungeon: Pile,
+    pub health: u8,
 }
 
 lazy_static! {
@@ -67,6 +68,7 @@ impl Game {
         dungeon.shuffle(rng);
         return Game {
             dungeon: Pile(dungeon),
+            health: 20,
         };
     }
 }

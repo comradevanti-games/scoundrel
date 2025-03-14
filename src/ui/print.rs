@@ -1,7 +1,7 @@
 use std::fmt::{self};
 
 use termion::color::{self};
-use termion::style;
+use termion::{cursor, style};
 
 use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game, pile::Pile};
@@ -62,6 +62,7 @@ impl fmt::Display for Pile {
 
 impl fmt::Display for Game {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}{}", termion::cursor::Goto(2, 2), &self.dungeon)
+        write!(f, "{}{}", cursor::Goto(2, 2), &self.dungeon)?;
+        write!(f, "{}Health: {}", cursor::Goto(2, 10), &self.health)
     }
 }
