@@ -10,7 +10,7 @@ pub struct Game {
 }
 
 lazy_static! {
-    static ref INITIAL_DUNGEON: Pile = vec![
+    static ref INITIAL_DUNGEON: Pile = Pile(vec![
         Rank::Ace.of(super::card::Suite::Clubs),
         Rank::Two.of(super::card::Suite::Clubs),
         Rank::Three.of(super::card::Suite::Clubs),
@@ -58,13 +58,15 @@ lazy_static! {
         Rank::Eight.of(super::card::Suite::Hearts),
         Rank::Nine.of(super::card::Suite::Hearts),
         Rank::Ten.of(super::card::Suite::Hearts),
-    ];
+    ]);
 }
 
 impl Game {
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let mut dungeon = INITIAL_DUNGEON.clone();
+        let mut dungeon = INITIAL_DUNGEON.0.clone();
         dungeon.shuffle(rng);
-        return Game { dungeon };
+        return Game {
+            dungeon: Pile(dungeon),
+        };
     }
 }

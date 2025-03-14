@@ -49,7 +49,7 @@ fn print_pile<W: Write>(stdout: &mut W, x: u16, y: u16, pile: &Pile) {
         stdout,
         "{}{}",
         termion::cursor::Goto(x, y),
-        pile.first().unwrap()
+        pile.0.first().unwrap()
     )
     .unwrap();
 }

@@ -1,3 +1,4 @@
 use super::card::Card;
 
-pub type Pile = Vec<Card>;
+#[derive(PartialEq, Debug)]
+pub struct Pile(pub Vec<Card>);
