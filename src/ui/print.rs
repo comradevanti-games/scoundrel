@@ -44,16 +44,12 @@ impl fmt::Display for Card {
     }
 }
 
-fn print_pile<W: Write>(stdout: &mut W, x: u16, y: u16, pile: &Pile) {
-    write!(
-        stdout,
-        "{}{}",
-        termion::cursor::Goto(x, y),
-        pile.0.first().unwrap()
-    )
-    .unwrap();
+impl fmt::Display for Pile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.0.first().unwrap())
+    }
 }
 
 pub fn print_game<W: Write>(stdout: &mut W, game: &Game) {
-    print_pile(stdout, 2, 2, &game.dungeon);
+    write!(stdout, "{}{}", termion::cursor::Goto(2, 2), &game.dungeon).unwrap();
 }
