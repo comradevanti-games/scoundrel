@@ -1,18 +1,21 @@
 use std::fmt::{self};
 
+use termion::color::{self};
+use termion::style;
+
 use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game, pile::Pile};
 extern crate termion;
 
 impl fmt::Display for Suite {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let char = match self {
-            Suite::Hearts => 'H',
-            Suite::Clubs => 'C',
-            Suite::Spades => 'S',
-            Suite::Diamonds => 'D',
-        };
-        write!(f, "{}", char)
+        match self {
+            Suite::Hearts => write!(f, "{}{}", color::Fg(color::Red), "H"),
+            Suite::Clubs => write!(f, "{}{}", color::Fg(color::Blue), "C"),
+            Suite::Spades => write!(f, "{}{}", color::Fg(color::LightBlack), "S"),
+            Suite::Diamonds => write!(f, "{}{}", color::Fg(color::Yellow), "D"),
+        }
+        .and(write!(f, "{}", style::Reset))
     }
 }
 
