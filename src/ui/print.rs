@@ -1,3 +1,4 @@
+use std::fs::write;
 use std::io::{self, Write};
 
 use termion::color::{self};
@@ -54,9 +55,14 @@ fn print_card<W: Write>(f: &mut W, x: u16, y: u16, card: &Card) -> io::Result<()
     print_suite(f, x + 1, y, &card.suite)
 }
 
+fn print_flipped_card<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
+    write!(f, "{}┌─┐", cursor::Goto(x, y))?;
+    write!(f, "{}│ │", cursor::Goto(x, y + 1))?;
+    write!(f, "{}└─┘", cursor::Goto(x, y + 2))
+}
+
 fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()> {
-    let card = pile.peek_top_card();
-    print_card(f, x, y, card.unwrap())
+    print_flipped_card(f, x, y)
 }
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
