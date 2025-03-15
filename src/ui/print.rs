@@ -52,6 +52,18 @@ fn make_card_text(card: &Card) -> String {
     )
 }
 
+fn print_empty_slot_with_content<W: Write>(
+    f: &mut W,
+    x: u16,
+    y: u16,
+    content: &String,
+) -> io::Result<()> {
+    write!(f, "{}┌   ┐", cursor::Goto(x, y))?;
+    write!(f, "{} {}", cursor::Goto(x, y + 1), content)?;
+    write!(f, "{}     ", cursor::Goto(x, y + 2))?;
+    write!(f, "{}└   ┘", cursor::Goto(x, y + 3))
+}
+
 fn print_card_with_content<W: Write>(
     f: &mut W,
     x: u16,
@@ -80,7 +92,12 @@ fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()
         print_empty_card(f, x + 1, y)?;
     }
 
-    print_card_with_content(f, x, y, &count.to_string())
+    let content = count.to_string();
+    if count > 0 {
+        print_card_with_content(f, x, y, &content)
+    } else {
+        print_empty_slot_with_content(f, x, y, &content)
+    }
 }
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
