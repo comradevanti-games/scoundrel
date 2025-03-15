@@ -1,3 +1,5 @@
+use std::cmp;
+
 use lazy_static::lazy_static;
 use rand::{Rng, seq::SliceRandom};
 
@@ -71,10 +73,6 @@ lazy_static! {
 const EMPTY_ROOM: [Option<Card>; 4] = [None, None, None, None];
 
 impl Card {
-    fn is_monster(&self) -> bool {
-        self.suite == Suite::Clubs || self.suite == Suite::Spades
-    }
-
     fn value(&self) -> u8 {
         match self.rank {
             Rank::Ace => 14,
@@ -159,13 +157,19 @@ impl Game {
         self.health = self.health.saturating_sub(monster_health);
     }
 
+    fn heal(&mut self, health: u8) {
+        self.health = cmp::min(20, self.health + health);
+    }
+
     pub fn interact_slot(&mut self, slot: usize) {
         let Some(card) = self.room[slot] else {
             return;
         };
 
-        if card.is_monster() {
-            self.fight(card.value());
+        match card.suite {
+            Suite::Hearts => self.heal(card.value()),
+            Suite::Clubs | Suite::Spades => self.fight(card.value()),
+            Suite::Diamonds => todo!(),
         }
 
         self.room[slot] = None;
