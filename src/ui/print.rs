@@ -115,13 +115,13 @@ Navigate: ← →\n\r\
 Avoid room: ,\n\r\
 Quit: q";
 
-pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: u8) -> io::Result<()> {
+pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io::Result<()> {
     print_pile(f, 2, 2, game.dungeon.count_cards())?;
 
     for (i, card) in game.room.iter().enumerate() {
         let x = (9 + 5 * i) as u16;
 
-        let y = if selected_slot == i as u8 { 1 } else { 2 };
+        let y = if selected_slot == i { 1 } else { 2 };
 
         print_maybe_card(f, x, y, card.as_ref())?;
     }
