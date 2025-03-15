@@ -5,6 +5,7 @@ use termion::{cursor, style};
 
 use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game};
+
 extern crate termion;
 
 const HEART: char = '♥';
@@ -110,15 +111,19 @@ fn print_maybe_card<W: Write>(f: &mut W, x: u16, y: u16, card: Option<&Card>) ->
 
 static CONTROLS: &str = "\
 Controls:\n\r\
+Navigate: ← →\n\r\
 Avoid room: ,\n\r\
 Quit: q";
 
-pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
+pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: u8) -> io::Result<()> {
     print_pile(f, 2, 2, game.dungeon.count_cards())?;
 
     for (i, card) in game.room.iter().enumerate() {
         let x = (9 + 5 * i) as u16;
-        print_maybe_card(f, x, 2, card.as_ref())?;
+
+        let y = if selected_slot == i as u8 { 1 } else { 2 };
+
+        print_maybe_card(f, x, y, card.as_ref())?;
     }
 
     print_pile(f, 32, 2, game.discard_count)?;
