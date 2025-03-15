@@ -2,11 +2,15 @@ use lazy_static::lazy_static;
 use rand::Rng;
 use rand::seq::SliceRandom;
 
-use super::{card::Rank, pile::Pile};
+use super::{
+    card::{Card, Rank},
+    pile::Pile,
+};
 
 #[derive(PartialEq, Debug)]
 pub struct Game {
     pub dungeon: Pile,
+    pub room: [Option<Card>; 4],
     pub health: u8,
 }
 
@@ -66,8 +70,12 @@ impl Game {
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
         let mut dungeon = INITIAL_DUNGEON.0.clone();
         dungeon.shuffle(rng);
+
+        let room = [dungeon.pop(), dungeon.pop(), dungeon.pop(), dungeon.pop()];
+
         return Game {
             dungeon: Pile(dungeon),
+            room,
             health: 20,
         };
     }
