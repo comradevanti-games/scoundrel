@@ -12,10 +12,6 @@ impl Pile {
         Pile(VecDeque::from(cards))
     }
 
-    pub fn peek_top_card(&self) -> Option<&Card> {
-        self.0.back()
-    }
-
     pub fn pop_top_card(&mut self) -> Option<Card> {
         self.0.pop_back()
     }

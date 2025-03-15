@@ -108,9 +108,10 @@ fn print_maybe_card<W: Write>(f: &mut W, x: u16, y: u16, card: Option<&Card>) ->
     }
 }
 
-static CONTROLS: &'static str = "Controls:\n\r\
-                                 Avoid room: ,\n\r\
-                                 Quit: q";
+static CONTROLS: &str = "\
+Controls:\n\r\
+Avoid room: ,\n\r\
+Quit: q";
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
     print_pile(f, 2, 2, game.dungeon.count_cards())?;

@@ -31,7 +31,7 @@ pub struct Card {
 
 impl Rank {
     pub fn of(self, suite: Suite) -> Card {
-        return Card { suite, rank: self };
+        Card { suite, rank: self }
     }
 }
 
