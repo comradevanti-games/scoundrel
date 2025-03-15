@@ -118,4 +118,8 @@ impl Game {
 
         self.already_avoided = true;
     }
+
+    pub fn interact_slot(&mut self, slot: usize) {
+        self.room[slot] = None
+    }
 }
