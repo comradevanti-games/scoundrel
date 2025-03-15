@@ -60,6 +60,11 @@ fn print_card<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<
 
 fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()> {
     let count = pile.count_cards();
+
+    if count > 1 {
+        print_card(f, x + 1, y, "")?;
+    }
+
     print_card(f, x, y, &count.to_string())
 }
 
