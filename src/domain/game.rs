@@ -72,12 +72,12 @@ const EMPTY_ROOM: [Option<Card>; 4] = [None, None, None, None];
 
 impl Game {
     fn populate_room(&mut self) {
-        self.room = [
-            self.dungeon.pop_top_card(),
-            self.dungeon.pop_top_card(),
-            self.dungeon.pop_top_card(),
-            self.dungeon.pop_top_card(),
-        ]
+        for slot in 0..4 {
+            if self.room[slot].is_some() {
+                continue;
+            }
+            self.room[slot] = self.dungeon.pop_top_card()
+        }
     }
 
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
