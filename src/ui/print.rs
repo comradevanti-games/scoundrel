@@ -121,14 +121,19 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
     for (i, card) in game.room.iter().enumerate() {
         let x = (9 + 5 * i) as u16;
 
-        let y = if selected_slot == i { 1 } else { 2 };
+        let is_selected = selected_slot == i;
+        let y = if is_selected && card.is_some() { 1 } else { 2 };
 
         print_maybe_card(f, x, y, card.as_ref())?;
+
+        if is_selected {
+            write!(f, "{}▀▀▀▀▀", cursor::Goto(x, 6))?;
+        }
     }
 
     print_pile(f, 32, 2, game.discard_count)?;
 
-    print_maybe_card(f, 2, 6, game.equipped.as_ref())?;
+    print_maybe_card(f, 2, 7, game.equipped.as_ref())?;
 
     write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
     write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)
