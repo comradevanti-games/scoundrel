@@ -4,7 +4,7 @@ use termion::color::{self};
 use termion::{cursor, style};
 
 use crate::domain::card::{Rank, Suite};
-use crate::domain::{card::Card, game::Game, pile::Pile};
+use crate::domain::{card::Card, game::Game};
 extern crate termion;
 
 const HEART: char = '♥';
@@ -60,7 +60,6 @@ fn print_empty_slot_with_content<W: Write>(
 ) -> io::Result<()> {
     write!(f, "{}┌   ┐", cursor::Goto(x, y))?;
     write!(f, "{} {}", cursor::Goto(x, y + 1), content)?;
-    write!(f, "{}     ", cursor::Goto(x, y + 2))?;
     write!(f, "{}└   ┘", cursor::Goto(x, y + 3))
 }
 
@@ -107,6 +106,8 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
             .map(|it| print_card(f, x, 2, it))
             .unwrap_or(Ok(()))?;
     }
+
+    print_pile(f, 32, 2, game.discard_count)?;
 
     write!(f, "{}Health: {}", cursor::Goto(2, 10), &game.health)
 }

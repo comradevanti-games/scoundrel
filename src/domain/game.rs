@@ -12,6 +12,7 @@ pub struct Game {
     pub dungeon: Pile,
     pub room: [Option<Card>; 4],
     pub health: u8,
+    pub discard_count: u8,
 }
 
 lazy_static! {
@@ -77,6 +78,7 @@ impl Game {
             dungeon: Pile(dungeon),
             room,
             health: 20,
+            discard_count: 0,
         };
     }
 }
