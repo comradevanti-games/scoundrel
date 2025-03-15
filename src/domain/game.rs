@@ -156,7 +156,7 @@ impl Game {
     }
 
     fn fight(&mut self, monster_health: u8) {
-        self.health -= monster_health;
+        self.health = self.health.saturating_sub(monster_health);
     }
 
     pub fn interact_slot(&mut self, slot: usize) {
