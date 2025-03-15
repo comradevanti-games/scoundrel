@@ -13,7 +13,7 @@ pub struct Game {
     pub room: [Option<Card>; 4],
     pub health: u8,
     pub discard_count: u8,
-    pub equipped: Option<Card>
+    pub equipped: Option<Card>,
 }
 
 lazy_static! {
@@ -68,19 +68,30 @@ lazy_static! {
     ]);
 }
 
+const EMPTY_ROOM: [Option<Card>; 4] = [None, None, None, None];
+
 impl Game {
+    fn populate_room(&mut self) {
+        self.room = [
+            self.dungeon.pop_top_card(),
+            self.dungeon.pop_top_card(),
+            self.dungeon.pop_top_card(),
+            self.dungeon.pop_top_card(),
+        ]
+    }
+
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
         let mut dungeon = INITIAL_DUNGEON.0.clone();
         dungeon.shuffle(rng);
 
-        let room = [dungeon.pop(), dungeon.pop(), dungeon.pop(), dungeon.pop()];
-
-        return Game {
+        let mut game = Game {
             dungeon: Pile(dungeon),
-            room,
             health: 20,
+            room: EMPTY_ROOM,
             discard_count: 0,
-            equipped: None
+            equipped: None,
         };
+        game.populate_room();
+        game
     }
 }

@@ -8,6 +8,10 @@ impl Pile {
         return self.0.first();
     }
 
+    pub fn pop_top_card(&mut self) -> Option<Card> {
+        self.0.pop()
+    }
+
     pub fn count_cards(&self) -> u8 {
         self.0.len() as u8
     }
