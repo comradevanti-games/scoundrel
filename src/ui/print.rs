@@ -50,19 +50,17 @@ fn print_rank<W: Write>(f: &mut W, x: u16, y: u16, rank: &Rank) -> io::Result<()
     write!(f, "{}", s)
 }
 
-fn print_card<W: Write>(f: &mut W, x: u16, y: u16, card: &Card) -> io::Result<()> {
-    print_rank(f, x, y, &card.rank)?;
-    print_suite(f, x + 1, y, &card.suite)
-}
+fn print_card<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<()> {
+    assert!(content.len() <= 2);
 
-fn print_flipped_card<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
-    write!(f, "{}┌─┐", cursor::Goto(x, y))?;
-    write!(f, "{}│ │", cursor::Goto(x, y + 1))?;
-    write!(f, "{}└─┘", cursor::Goto(x, y + 2))
+    write!(f, "{}┌──┐", cursor::Goto(x, y))?;
+    write!(f, "{}│{: >2}│", cursor::Goto(x, y + 1), content)?;
+    write!(f, "{}└──┘", cursor::Goto(x, y + 2))
 }
 
 fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()> {
-    print_flipped_card(f, x, y)
+    let count = pile.count_cards();
+    print_card(f, x, y, &count.to_string())
 }
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
