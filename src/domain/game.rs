@@ -1,6 +1,7 @@
+use std::collections::VecDeque;
+
 use lazy_static::lazy_static;
 use rand::Rng;
-use rand::seq::SliceRandom;
 
 use super::{
     card::{Card, Rank},
@@ -17,7 +18,7 @@ pub struct Game {
 }
 
 lazy_static! {
-    static ref INITIAL_DUNGEON: Pile = Pile(vec![
+    static ref INITIAL_DUNGEON: Vec<Card> = vec![
         Rank::Ace.of(super::card::Suite::Clubs),
         Rank::Two.of(super::card::Suite::Clubs),
         Rank::Three.of(super::card::Suite::Clubs),
@@ -65,7 +66,7 @@ lazy_static! {
         Rank::Eight.of(super::card::Suite::Hearts),
         Rank::Nine.of(super::card::Suite::Hearts),
         Rank::Ten.of(super::card::Suite::Hearts),
-    ]);
+    ];
 }
 
 const EMPTY_ROOM: [Option<Card>; 4] = [None, None, None, None];
@@ -81,11 +82,11 @@ impl Game {
     }
 
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let mut dungeon = INITIAL_DUNGEON.0.clone();
+        let mut dungeon = Pile(VecDeque::from(INITIAL_DUNGEON.clone()));
         dungeon.shuffle(rng);
 
         let mut game = Game {
-            dungeon: Pile(dungeon),
+            dungeon,
             health: 20,
             room: EMPTY_ROOM,
             discard_count: 0,
