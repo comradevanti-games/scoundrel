@@ -129,6 +129,7 @@ impl Game {
         let occupied_slots = self.count_occupied_room_slots();
         if occupied_slots == 1 {
             self.populate_room();
+            self.already_avoided = false;
         }
     }
 }
