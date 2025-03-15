@@ -13,6 +13,7 @@ pub struct Game {
     pub room: [Option<Card>; 4],
     pub health: u8,
     pub discard_count: u8,
+    pub equipped: Option<Card>
 }
 
 lazy_static! {
@@ -79,6 +80,7 @@ impl Game {
             room,
             health: 20,
             discard_count: 0,
+            equipped: None
         };
     }
 }

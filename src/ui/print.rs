@@ -118,5 +118,7 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
 
     print_pile(f, 32, 2, game.discard_count)?;
 
-    write!(f, "{}Health: {}", cursor::Goto(2, 10), &game.health)
+    print_maybe_card(f, 2, 6, game.equipped.as_ref())?;
+
+    write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)
 }
