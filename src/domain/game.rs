@@ -82,7 +82,7 @@ impl Game {
     }
 
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let mut dungeon = Pile(VecDeque::from(INITIAL_DUNGEON.clone()));
+        let mut dungeon = Pile::from(INITIAL_DUNGEON.clone());
         dungeon.shuffle(rng);
 
         let mut game = Game {

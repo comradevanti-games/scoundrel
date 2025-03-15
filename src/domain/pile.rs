@@ -5,9 +5,13 @@ use rand::{Rng, seq::SliceRandom};
 use super::card::Card;
 
 #[derive(PartialEq, Debug)]
-pub struct Pile(pub VecDeque<Card>);
+pub struct Pile(VecDeque<Card>);
 
 impl Pile {
+    pub fn from(cards: Vec<Card>) -> Self {
+        Pile(VecDeque::from(cards))
+    }
+
     pub fn peek_top_card(&self) -> Option<&Card> {
         self.0.back()
     }
