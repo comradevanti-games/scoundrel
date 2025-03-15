@@ -20,6 +20,8 @@ fn main() {
     let mut stdout = stdout().into_raw_mode().unwrap();
     let stdin = stdin();
 
+    write!(stdout, "{}", termion::cursor::Hide).unwrap();
+
     let mut rng = rand::rng();
     let mut game = Game::start_new(&mut rng);
 
