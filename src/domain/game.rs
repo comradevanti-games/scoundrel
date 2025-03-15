@@ -106,8 +106,20 @@ impl Game {
         room
     }
 
+    fn count_occupied_room_slots(&self) -> usize {
+        self.room.iter().filter(|it| it.is_some()).count()
+    }
+
+    fn room_is_full(&self) -> bool {
+        self.count_occupied_room_slots() == 4
+    }
+
     pub fn try_avoid<R: Rng + ?Sized>(&mut self, rng: &mut R) {
         if self.already_avoided {
+            return;
+        }
+
+        if !self.room_is_full() {
             return;
         }
 
@@ -119,9 +131,6 @@ impl Game {
         self.already_avoided = true;
     }
 
-    fn count_occupied_room_slots(&self) -> usize {
-        self.room.iter().filter(|it| it.is_some()).count()
-    }
 
     pub fn interact_slot(&mut self, slot: usize) {
         self.room[slot] = None;
