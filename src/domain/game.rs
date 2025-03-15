@@ -2,7 +2,7 @@ use lazy_static::lazy_static;
 use rand::{Rng, seq::SliceRandom};
 
 use super::{
-    card::{Card, Rank},
+    card::{Card, Rank, Suite},
     pile::Pile,
 };
 
@@ -70,6 +70,30 @@ lazy_static! {
 
 const EMPTY_ROOM: [Option<Card>; 4] = [None, None, None, None];
 
+impl Card {
+    fn is_monster(&self) -> bool {
+        self.suite == Suite::Clubs || self.suite == Suite::Spades
+    }
+
+    fn value(&self) -> u8 {
+        match self.rank {
+            Rank::Ace => 14,
+            Rank::Two => 2,
+            Rank::Three => 3,
+            Rank::Four => 4,
+            Rank::Five => 5,
+            Rank::Six => 6,
+            Rank::Seven => 7,
+            Rank::Eight => 8,
+            Rank::Nine => 9,
+            Rank::Ten => 10,
+            Rank::Jack => 11,
+            Rank::Queen => 12,
+            Rank::King => 13,
+        }
+    }
+}
+
 impl Game {
     fn populate_room(&mut self) {
         for slot in 0..4 {
@@ -131,8 +155,19 @@ impl Game {
         self.already_avoided = true;
     }
 
+    fn fight(&mut self, monster_health: u8) {
+        self.health -= monster_health;
+    }
 
     pub fn interact_slot(&mut self, slot: usize) {
+        let Some(card) = self.room[slot] else {
+            return;
+        };
+
+        if card.is_monster() {
+            self.fight(card.value());
+        }
+
         self.room[slot] = None;
 
         let occupied_slots = self.count_occupied_room_slots();
