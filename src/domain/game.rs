@@ -13,6 +13,7 @@ pub struct Game {
     pub health: u8,
     pub discard_count: u8,
     pub equipped: Option<Card>,
+    pub already_avoided: bool,
 }
 
 lazy_static! {
@@ -89,6 +90,7 @@ impl Game {
             room: EMPTY_ROOM,
             discard_count: 0,
             equipped: None,
+            already_avoided: false,
         };
         game.populate_room();
         game
@@ -105,9 +107,15 @@ impl Game {
     }
 
     pub fn try_avoid<R: Rng + ?Sized>(&mut self, rng: &mut R) {
+        if self.already_avoided {
+            return;
+        }
+
         let mut room = self.remove_room();
         room.shuffle(rng);
         self.dungeon.add_to_bottom(room);
         self.populate_room();
+
+        self.already_avoided = true;
     }
 }
