@@ -119,7 +119,16 @@ impl Game {
         self.already_avoided = true;
     }
 
+    fn count_occupied_room_slots(&self) -> usize {
+        self.room.iter().filter(|it| it.is_some()).count()
+    }
+
     pub fn interact_slot(&mut self, slot: usize) {
-        self.room[slot] = None
+        self.room[slot] = None;
+
+        let occupied_slots = self.count_occupied_room_slots();
+        if occupied_slots == 1 {
+            self.populate_room();
+        }
     }
 }
