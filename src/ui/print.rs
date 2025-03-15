@@ -85,9 +85,7 @@ fn print_card<W: Write>(f: &mut W, x: u16, y: u16, card: &Card) -> io::Result<()
     print_card_with_content(f, x, y, &make_card_text(card))
 }
 
-fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()> {
-    let count = pile.count_cards();
-
+fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, count: u8) -> io::Result<()> {
     if count > 1 {
         print_empty_card(f, x + 1, y)?;
     }
@@ -101,7 +99,7 @@ fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, pile: &Pile) -> io::Result<()
 }
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
-    print_pile(f, 2, 2, &game.dungeon)?;
+    print_pile(f, 2, 2, game.dungeon.count_cards())?;
 
     for (i, card) in game.room.iter().enumerate() {
         let x = (9 + 5 * i) as u16;
