@@ -21,7 +21,7 @@ fn main() {
     let stdin = stdin();
 
     let mut rng = rand::rng();
-    let game = Game::start_new(&mut rng);
+    let mut game = Game::start_new(&mut rng);
 
     print_game(&mut stdout, &game).unwrap();
     stdout.flush().unwrap();
@@ -29,7 +29,12 @@ fn main() {
     for key in stdin.keys() {
         match key.as_ref().unwrap() {
             Key::Char('q') => break,
+            Key::Char(',') => game.try_avoid(&mut rng),
             _ => {}
         }
+
+        write!(stdout, "{}", termion::clear::All).unwrap();
+        print_game(&mut stdout, &game).unwrap();
+        stdout.flush().unwrap();
     }
 }

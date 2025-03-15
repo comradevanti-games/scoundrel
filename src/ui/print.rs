@@ -109,6 +109,7 @@ fn print_maybe_card<W: Write>(f: &mut W, x: u16, y: u16, card: Option<&Card>) ->
 }
 
 static CONTROLS: &'static str = "Controls:\n\r\
+                                 Avoid room: ,\n\r\
                                  Quit: q";
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
@@ -123,5 +124,6 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
 
     print_maybe_card(f, 2, 6, game.equipped.as_ref())?;
 
-    write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)
+    write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
+    write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)
 }

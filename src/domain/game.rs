@@ -1,7 +1,5 @@
-use std::collections::VecDeque;
-
 use lazy_static::lazy_static;
-use rand::Rng;
+use rand::{Rng, seq::SliceRandom};
 
 use super::{
     card::{Card, Rank},
@@ -94,5 +92,22 @@ impl Game {
         };
         game.populate_room();
         game
+    }
+
+    fn remove_room(&mut self) -> Vec<Card> {
+        let room: Vec<Card> = self
+            .room
+            .into_iter()
+            .collect::<Option<Vec<_>>>()
+            .unwrap_or_default();
+        self.room = EMPTY_ROOM;
+        room
+    }
+
+    pub fn try_avoid<R: Rng + ?Sized>(&mut self, rng: &mut R) {
+        let mut room = self.remove_room();
+        room.shuffle(rng);
+        self.dungeon.add_to_bottom(room);
+        self.populate_room();
     }
 }

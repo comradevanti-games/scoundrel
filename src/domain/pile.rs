@@ -20,6 +20,12 @@ impl Pile {
         self.0.pop_back()
     }
 
+    pub fn add_to_bottom(&mut self, cards: Vec<Card>) {
+        for card in cards {
+            self.0.push_front(card);
+        }
+    }
+
     pub fn count_cards(&self) -> u8 {
         self.0.len() as u8
     }
