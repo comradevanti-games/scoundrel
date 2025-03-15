@@ -25,7 +25,7 @@ fn main() {
 
     let mut rng = rand::rng();
     let mut game = Game::start_new(&mut rng);
-    let mut selected_slot = 0 as u8;
+    let mut selected_slot = 0_u8;
 
     print_game(&mut stdout, &game, selected_slot).unwrap();
     stdout.flush().unwrap();
