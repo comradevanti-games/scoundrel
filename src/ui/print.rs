@@ -63,6 +63,10 @@ fn print_empty_slot_with_content<W: Write>(
     write!(f, "{}└   ┘", cursor::Goto(x, y + 3))
 }
 
+fn print_empty_slot<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
+    print_empty_slot_with_content(f, x, y, &"   ".to_string())
+}
+
 fn print_card_with_content<W: Write>(
     f: &mut W,
     x: u16,
@@ -97,14 +101,19 @@ fn print_pile<W: Write>(f: &mut W, x: u16, y: u16, count: u8) -> io::Result<()> 
     }
 }
 
+fn print_maybe_card<W: Write>(f: &mut W, x: u16, y: u16, card: Option<&Card>) -> io::Result<()> {
+    match card {
+        Some(it) => print_card(f, x, y, it),
+        None => print_empty_slot(f, x, y),
+    }
+}
+
 pub fn print_game<W: Write>(f: &mut W, game: &Game) -> io::Result<()> {
     print_pile(f, 2, 2, game.dungeon.count_cards())?;
 
     for (i, card) in game.room.iter().enumerate() {
         let x = (9 + 5 * i) as u16;
-        card.as_ref()
-            .map(|it| print_card(f, x, 2, it))
-            .unwrap_or(Ok(()))?;
+        print_maybe_card(f, x, 2, card.as_ref())?;
     }
 
     print_pile(f, 32, 2, game.discard_count)?;
