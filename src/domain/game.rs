@@ -223,11 +223,7 @@ impl Game {
     }
 
     fn weapon_damage(&self) -> Option<u8> {
-        match (self.equipped, &self.slain[..]) {
-            (Some(weapon), []) => Some(weapon.value()),
-            (Some(_), slain) => Some(slain.last().unwrap().value()),
-            _ => None,
-        }
+        self.equipped.map(|weapon| weapon.value())
     }
 
     pub fn check_game_over(&self) -> Option<GameOverState> {
