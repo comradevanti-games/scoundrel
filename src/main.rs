@@ -37,7 +37,7 @@ fn main() {
         match key.as_ref().unwrap() {
             Key::Char('q') => break,
             Key::Char(',') => game.try_avoid(&mut rng),
-            Key::Char(' ') => game.interact_slot(selected_slot),
+            Key::Char('0') => game.interact_slot(selected_slot),
             Key::Right => selected_slot = go_right(selected_slot),
             Key::Left => selected_slot = go_left(selected_slot),
             _ => {}
