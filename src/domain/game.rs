@@ -173,6 +173,12 @@ impl Game {
         self.already_healed = true
     }
 
+    fn reset_for_next_turn(&mut self) {
+        self.populate_room();
+        self.already_avoided = false;
+        self.already_healed = false;
+    }
+
     pub fn interact_slot(&mut self, slot: usize) {
         let Some(card) = self.room[slot] else {
             return;
@@ -196,9 +202,7 @@ impl Game {
 
         let occupied_slots = self.count_occupied_room_slots();
         if occupied_slots == 1 {
-            self.populate_room();
-            self.already_avoided = false;
-            self.already_healed = false;
+            self.reset_for_next_turn();
         }
     }
 }
