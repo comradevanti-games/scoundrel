@@ -182,8 +182,8 @@ impl Game {
 
     fn can_fight(&self, monster: &Card) -> bool {
         match (self.equipped, self.last_slain_monster()) {
-            (Some(weapon), None) => monster.value() <= weapon.value(),
-            (_, Some(slain)) => monster.value() <= slain.value(),
+            (Some(_), None) => true,
+            (Some(_), Some(slain)) => monster.value() <= slain.value(),
             _ => false,
         }
     }
@@ -217,6 +217,14 @@ impl Game {
         self.equipped = Some(card);
     }
 
+    fn weapon_damage(&self) -> Option<u8> {
+        match (self.equipped, &self.slain[..]) {
+            (Some(weapon), []) => Some(weapon.value()),
+            (Some(_), slain) => Some(slain.last().unwrap().value()),
+            _ => None,
+        }
+    }
+
     pub fn interact_slot(&mut self, slot: usize) {
         let Some(card) = self.take_card_from_slot(slot) else {
             return;
@@ -231,7 +239,8 @@ impl Game {
             }
             Suite::Clubs | Suite::Spades => match self.equipped {
                 Some(_) if self.can_fight(&card) => {
-                    self.take_damage(card.value());
+                    let damage = self.weapon_damage().unwrap();
+                    self.take_damage(card.value().saturating_sub(damage));
                     self.slain.push(card);
                 }
                 _ => self.fight_bare_handed(card),
