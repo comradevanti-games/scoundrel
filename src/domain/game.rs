@@ -155,8 +155,13 @@ impl Game {
         self.already_avoided = true;
     }
 
-    fn discard(&mut self, slot: usize) {
+    fn take_card_from_slot(&mut self, slot: usize) -> Option<Card> {
+        let card = self.room[slot];
         self.room[slot] = None;
+        card
+    }
+
+    fn discard(&mut self) {
         self.discard_count += 1;
     }
 
@@ -180,7 +185,7 @@ impl Game {
     }
 
     pub fn interact_slot(&mut self, slot: usize) {
-        let Some(card) = self.room[slot] else {
+        let Some(card) = self.take_card_from_slot(slot) else {
             return;
         };
 
@@ -189,14 +194,14 @@ impl Game {
                 if self.can_heal() {
                     self.heal(card.value());
                 }
-                self.discard(slot);
+                self.discard();
             }
             Suite::Clubs | Suite::Spades => {
                 self.fight(card.value());
-                self.discard(slot);
+                self.discard();
             }
             Suite::Diamonds => {
-                self.discard(slot);
+                self.discard();
             }
         }
 
