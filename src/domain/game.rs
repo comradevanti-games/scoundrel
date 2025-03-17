@@ -184,6 +184,17 @@ impl Game {
         self.already_healed = false;
     }
 
+    fn discard_equipped(&mut self) {
+        if let Some(card) = self.equipped {
+            self.discard();
+            self.equipped = None;
+        }
+    }
+
+    fn equip(&mut self, card: Card) {
+        self.equipped = Some(card);
+    }
+
     pub fn interact_slot(&mut self, slot: usize) {
         let Some(card) = self.take_card_from_slot(slot) else {
             return;
@@ -201,7 +212,8 @@ impl Game {
                 self.discard();
             }
             Suite::Diamonds => {
-                self.discard();
+                self.discard_equipped();
+                self.equip(card);
             }
         }
 
