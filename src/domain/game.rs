@@ -8,6 +8,10 @@ use super::{
     pile::Pile,
 };
 
+pub enum GameOverState {
+    Death,
+}
+
 #[derive(PartialEq, Debug)]
 pub struct Game {
     pub dungeon: Pile,
@@ -222,6 +226,14 @@ impl Game {
             (Some(weapon), []) => Some(weapon.value()),
             (Some(_), slain) => Some(slain.last().unwrap().value()),
             _ => None,
+        }
+    }
+
+    pub fn check_game_over(&self) -> Option<GameOverState> {
+        if self.health == 0 {
+            Some(GameOverState::Death)
+        } else {
+            None
         }
     }
 

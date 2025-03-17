@@ -2,7 +2,10 @@ use std::io::{Write, stdin, stdout};
 
 use domain::game::Game;
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
-use ui::{navigation::*, print::print_game};
+use ui::{
+    navigation::*,
+    print::{print_game, print_game_over},
+};
 
 extern crate termion;
 
@@ -41,7 +44,12 @@ fn main() {
         }
 
         write!(stdout, "{}", termion::clear::All).unwrap();
-        print_game(&mut stdout, &game, selected_slot).unwrap();
+
+        match game.check_game_over() {
+            Some(domain::game::GameOverState::Death) => print_game_over(&mut stdout).unwrap(),
+            None => print_game(&mut stdout, &game, selected_slot).unwrap(),
+        }
+
         stdout.flush().unwrap();
     }
 }

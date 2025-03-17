@@ -144,3 +144,9 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
     write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
     write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)
 }
+
+static GAME_OVER: &str = "GAME OVER";
+
+pub fn print_game_over<W: Write>(f: &mut W) -> io::Result<()> {
+    write!(f, "{}{}", cursor::Goto(5, 5), GAME_OVER)
+}
