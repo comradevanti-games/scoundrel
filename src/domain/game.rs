@@ -16,6 +16,7 @@ pub struct Game {
     pub discard_count: u8,
     pub equipped: Option<Card>,
     pub already_avoided: bool,
+    already_healed: bool,
 }
 
 lazy_static! {
@@ -113,6 +114,7 @@ impl Game {
             discard_count: 0,
             equipped: None,
             already_avoided: false,
+            already_healed: false,
         };
         game.populate_room();
         game
@@ -162,8 +164,13 @@ impl Game {
         self.health = self.health.saturating_sub(monster_health);
     }
 
+    fn can_heal(&self) -> bool {
+        !self.already_healed
+    }
+
     fn heal(&mut self, health: u8) {
         self.health = cmp::min(20, self.health + health);
+        self.already_healed = true
     }
 
     pub fn interact_slot(&mut self, slot: usize) {
@@ -173,7 +180,9 @@ impl Game {
 
         match card.suite {
             Suite::Hearts => {
-                self.heal(card.value());
+                if self.can_heal() {
+                    self.heal(card.value());
+                }
                 self.discard(slot);
             }
             Suite::Clubs | Suite::Spades => {
@@ -189,6 +198,7 @@ impl Game {
         if occupied_slots == 1 {
             self.populate_room();
             self.already_avoided = false;
+            self.already_healed = false;
         }
     }
 }
