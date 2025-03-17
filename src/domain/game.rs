@@ -167,12 +167,14 @@ impl Game {
         self.discard_count += 1;
     }
 
-    fn fight(&mut self, monster: Card) {
+    fn fight_bare_handed(&mut self, monster: Card) {
         self.health = self.health.saturating_sub(monster.value());
+        self.discard();
+    }
 
-        if self.equipped.is_some() {
-            self.slain.push(monster);
-        }
+    fn fight_with(&mut self, monster: Card, weapon: &Card) {
+        self.health = self.health.saturating_sub(monster.value());
+        self.slain.push(monster);
     }
 
     fn can_heal(&self) -> bool {
@@ -217,8 +219,11 @@ impl Game {
                 self.discard();
             }
             Suite::Clubs | Suite::Spades => {
-                self.fight(card);
-                self.discard();
+                if let Some(weapon) = self.equipped {
+                    self.fight_with(card, &weapon);
+                } else {
+                    self.fight_bare_handed(card);
+                }
             }
             Suite::Diamonds => {
                 self.discard_equipped();
