@@ -172,7 +172,19 @@ impl Game {
         self.discard();
     }
 
-    fn fight_with(&mut self, monster: Card, weapon: &Card) {
+    fn last_slain_monster(&self) -> Option<&Card> {
+        self.slain.last()
+    }
+
+    fn can_fight(&self, monster: &Card) -> bool {
+        match (self.equipped, self.last_slain_monster()) {
+            (Some(weapon), None) => monster.value() <= weapon.value(),
+            (_, Some(slain)) => monster.value() <= slain.value(),
+            _ => false,
+        }
+    }
+
+    fn fight_with(&mut self, monster: Card, weapon_damage: u8) {
         self.health = self.health.saturating_sub(monster.value());
         self.slain.push(monster);
     }
@@ -218,13 +230,10 @@ impl Game {
                 }
                 self.discard();
             }
-            Suite::Clubs | Suite::Spades => {
-                if let Some(weapon) = self.equipped {
-                    self.fight_with(card, &weapon);
-                } else {
-                    self.fight_bare_handed(card);
-                }
-            }
+            Suite::Clubs | Suite::Spades => match self.equipped {
+                Some(weapon) if self.can_fight(&card) => self.fight_with(card, weapon.value()),
+                _ => self.fight_bare_handed(card),
+            },
             Suite::Diamonds => {
                 self.discard_equipped();
                 self.equip(card);
