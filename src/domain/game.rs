@@ -11,6 +11,7 @@ use super::{
 #[derive(PartialEq, Debug)]
 pub struct Game {
     pub dungeon: Pile,
+    pub slain: Vec<Card>,
     pub room: [Option<Card>; 4],
     pub health: u8,
     pub discard_count: u8,
@@ -109,6 +110,7 @@ impl Game {
 
         let mut game = Game {
             dungeon,
+            slain: vec![],
             health: 20,
             room: EMPTY_ROOM,
             discard_count: 0,
@@ -165,8 +167,8 @@ impl Game {
         self.discard_count += 1;
     }
 
-    fn fight(&mut self, monster_health: u8) {
-        self.health = self.health.saturating_sub(monster_health);
+    fn fight(&mut self, monster: Card) {
+        self.health = self.health.saturating_sub(monster.value());
     }
 
     fn can_heal(&self) -> bool {
@@ -185,10 +187,13 @@ impl Game {
     }
 
     fn discard_equipped(&mut self) {
-        if let Some(card) = self.equipped {
+        if self.equipped.is_some() {
             self.discard();
             self.equipped = None;
         }
+
+        self.discard_count += self.slain.len() as u8;
+        self.slain.clear();
     }
 
     fn equip(&mut self, card: Card) {
@@ -208,7 +213,7 @@ impl Game {
                 self.discard();
             }
             Suite::Clubs | Suite::Spades => {
-                self.fight(card.value());
+                self.fight(card);
                 self.discard();
             }
             Suite::Diamonds => {
