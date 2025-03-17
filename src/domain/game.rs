@@ -153,6 +153,11 @@ impl Game {
         self.already_avoided = true;
     }
 
+    fn discard(&mut self, slot: usize) {
+        self.room[slot] = None;
+        self.discard_count += 1;
+    }
+
     fn fight(&mut self, monster_health: u8) {
         self.health = self.health.saturating_sub(monster_health);
     }
@@ -167,12 +172,18 @@ impl Game {
         };
 
         match card.suite {
-            Suite::Hearts => self.heal(card.value()),
-            Suite::Clubs | Suite::Spades => self.fight(card.value()),
-            Suite::Diamonds => todo!(),
+            Suite::Hearts => {
+                self.heal(card.value());
+                self.discard(slot);
+            }
+            Suite::Clubs | Suite::Spades => {
+                self.fight(card.value());
+                self.discard(slot);
+            }
+            Suite::Diamonds => {
+                self.discard(slot);
+            }
         }
-
-        self.room[slot] = None;
 
         let occupied_slots = self.count_occupied_room_slots();
         if occupied_slots == 1 {
