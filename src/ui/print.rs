@@ -114,6 +114,7 @@ static CONTROLS: &str = "\
 Controls:\n\r\
 Navigate: ← →\n\r\
 Avoid room: ,\n\r\
+Interact with card: 0\n\r\
 Quit: q";
 
 pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io::Result<()> {
