@@ -169,6 +169,10 @@ impl Game {
 
     fn fight(&mut self, monster: Card) {
         self.health = self.health.saturating_sub(monster.value());
+
+        if self.equipped.is_some() {
+            self.slain.push(monster);
+        }
     }
 
     fn can_heal(&self) -> bool {
