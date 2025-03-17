@@ -188,11 +188,6 @@ impl Game {
         }
     }
 
-    fn fight_with(&mut self, monster: Card, weapon_damage: u8) {
-        self.take_damage(monster.value());
-        self.slain.push(monster);
-    }
-
     fn can_heal(&self) -> bool {
         !self.already_healed
     }
@@ -235,7 +230,10 @@ impl Game {
                 self.discard();
             }
             Suite::Clubs | Suite::Spades => match self.equipped {
-                Some(weapon) if self.can_fight(&card) => self.fight_with(card, weapon.value()),
+                Some(_) if self.can_fight(&card) => {
+                    self.take_damage(card.value());
+                    self.slain.push(card);
+                }
                 _ => self.fight_bare_handed(card),
             },
             Suite::Diamonds => {
