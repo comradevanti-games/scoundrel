@@ -150,3 +150,9 @@ static GAME_OVER: &str = "GAME OVER";
 pub fn print_game_over<W: Write>(f: &mut W) -> io::Result<()> {
     write!(f, "{}{}", cursor::Goto(5, 5), GAME_OVER)
 }
+
+static WIN: &str = "YOU WIN";
+
+pub fn print_win<W: Write>(f: &mut W) -> io::Result<()> {
+    write!(f, "{}{}", cursor::Goto(5, 5), WIN)
+}

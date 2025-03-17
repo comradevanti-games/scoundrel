@@ -4,7 +4,7 @@ use domain::game::Game;
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 use ui::{
     navigation::*,
-    print::{print_game, print_game_over},
+    print::{print_game, print_game_over, print_win},
 };
 
 extern crate termion;
@@ -47,6 +47,7 @@ fn main() {
 
         match game.check_game_over() {
             Some(domain::game::GameOverState::Death) => print_game_over(&mut stdout).unwrap(),
+            Some(domain::game::GameOverState::Win) => print_win(&mut stdout).unwrap(),
             None => print_game(&mut stdout, &game, selected_slot).unwrap(),
         }
 

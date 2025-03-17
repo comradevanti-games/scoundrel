@@ -9,6 +9,7 @@ use super::{
 };
 
 pub enum GameOverState {
+    Win,
     Death,
 }
 
@@ -232,6 +233,8 @@ impl Game {
     pub fn check_game_over(&self) -> Option<GameOverState> {
         if self.health == 0 {
             Some(GameOverState::Death)
+        } else if self.dungeon.is_empty() && self.count_occupied_room_slots() == 0 {
+            Some(GameOverState::Win)
         } else {
             None
         }

@@ -29,4 +29,8 @@ impl Pile {
     pub fn shuffle<R: Rng + ?Sized>(&mut self, rng: &mut R) {
         self.0.make_contiguous().shuffle(rng);
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
