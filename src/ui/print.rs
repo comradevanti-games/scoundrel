@@ -75,7 +75,8 @@ fn print_card_with_content<W: Write>(
     content: &String,
 ) -> io::Result<()> {
     write!(f, "{}┌───┐", cursor::Goto(x, y))?;
-    write!(f, "{}│{}", cursor::Goto(x, y + 1), content)?;
+    write!(f, "{}│    ", cursor::Goto(x, y + 1))?;
+    write!(f, "{}{}", cursor::Goto(x + 1, y + 1), content)?;
     write!(f, "{}│", cursor::Goto(x + 4, y + 1))?;
     write!(f, "{}│   │", cursor::Goto(x, y + 2))?;
     write!(f, "{}└───┘", cursor::Goto(x, y + 3))
@@ -134,6 +135,11 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
     print_pile(f, 32, 2, game.discard_count)?;
 
     print_maybe_card(f, 2, 7, game.equipped.as_ref())?;
+
+    for (i, card) in game.slain.iter().enumerate() {
+        let x = (9 + i) as u16;
+        print_card(f, x, 7, card)?;
+    }
 
     write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
     write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)
