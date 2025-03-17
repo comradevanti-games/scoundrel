@@ -117,6 +117,10 @@ Avoid room: ,\n\r\
 Interact with card: 0\n\r\
 Quit: q";
 
+static HOW_TO_PLAY: &str = "\
+How to play: http://stfj.net/art/2011/Scoundrel.pdf
+";
+
 pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io::Result<()> {
     print_pile(f, 2, 2, game.dungeon.count_cards())?;
 
@@ -143,7 +147,8 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
     }
 
     write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
-    write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)
+    write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)?;
+    write!(f, "{}{}", cursor::Goto(0, 26), HOW_TO_PLAY)
 }
 
 static GAME_OVER: &str = "GAME OVER";
