@@ -167,8 +167,12 @@ impl Game {
         self.discard_count += 1;
     }
 
+    fn take_damage(&mut self, damage: u8) {
+        self.health = self.health.saturating_sub(damage);
+    }
+
     fn fight_bare_handed(&mut self, monster: Card) {
-        self.health = self.health.saturating_sub(monster.value());
+        self.take_damage(monster.value());
         self.discard();
     }
 
@@ -185,7 +189,7 @@ impl Game {
     }
 
     fn fight_with(&mut self, monster: Card, weapon_damage: u8) {
-        self.health = self.health.saturating_sub(monster.value());
+        self.take_damage(monster.value());
         self.slain.push(monster);
     }
 
