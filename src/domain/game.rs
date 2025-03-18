@@ -218,4 +218,14 @@ mod tests {
             assert!(dungeon.contains(card));
         }
     }
+
+    #[test]
+    fn initial_dungeon_should_be_shuffled() {
+        let mut rng = StdRng::seed_from_u64(123);
+
+        let dungeon1 = Game::make_new_dungeon(&mut rng);
+        let dungeon2 = Game::make_new_dungeon(&mut rng);
+
+        assert_ne!(dungeon1, dungeon2)
+    }
 }
