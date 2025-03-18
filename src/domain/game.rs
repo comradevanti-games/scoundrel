@@ -1,4 +1,4 @@
-use std::{cmp, iter};
+use std::cmp;
 
 use lazy_static::lazy_static;
 use rand::{Rng, seq::SliceRandom};
