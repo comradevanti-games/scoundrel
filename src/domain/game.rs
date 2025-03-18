@@ -228,4 +228,13 @@ mod tests {
 
         assert_ne!(dungeon1, dungeon2)
     }
+
+    #[test]
+    fn initial_health_should_be_20() {
+        let mut rng = StdRng::seed_from_u64(123);
+
+        let game = Game::start_new(&mut rng);
+
+        assert_eq!(20, game.health)
+    }
 }
