@@ -13,6 +13,7 @@ mod domain {
     pub mod card;
     pub mod game;
     pub mod pile;
+    pub mod room;
 }
 
 mod ui {
