@@ -33,4 +33,8 @@ impl Pile {
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
+
+    pub fn contains(&self, card: &Card) -> bool {
+        self.0.contains(card)
+    }
 }
