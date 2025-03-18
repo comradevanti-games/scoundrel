@@ -61,14 +61,14 @@ impl Card {
 const INITIAL_HEALTH: u8 = 20;
 
 impl Game {
-    fn make_new_dungeon<R: Rng + ?Sized>(rng: &mut R) -> Pile {
+    fn generate_dungeon<R: Rng + ?Sized>(rng: &mut R) -> Pile {
         let mut dungeon = Pile::from(DUNGEON_CARDS.clone());
         dungeon.shuffle(rng);
         dungeon
     }
 
     pub fn start_new<R: Rng + ?Sized>(rng: &mut R) -> Self {
-        let dungeon = Game::make_new_dungeon(rng);
+        let dungeon = Game::generate_dungeon(rng);
         let mut game = Game {
             dungeon,
             slain: vec![],
@@ -210,7 +210,7 @@ mod tests {
     #[test]
     fn initial_dungeon_should_have_correct_cards() {
         let mut rng = StdRng::seed_from_u64(123);
-        let dungeon = Game::make_new_dungeon(&mut rng);
+        let dungeon = Game::generate_dungeon(&mut rng);
 
         assert_eq!(48, dungeon.count_cards());
 
@@ -223,8 +223,8 @@ mod tests {
     fn initial_dungeon_should_be_shuffled() {
         let mut rng = StdRng::seed_from_u64(123);
 
-        let dungeon1 = Game::make_new_dungeon(&mut rng);
-        let dungeon2 = Game::make_new_dungeon(&mut rng);
+        let dungeon1 = Game::generate_dungeon(&mut rng);
+        let dungeon2 = Game::generate_dungeon(&mut rng);
 
         assert_ne!(dungeon1, dungeon2)
     }
