@@ -99,6 +99,8 @@ impl Card {
     }
 }
 
+const INITIAL_HEALTH: u8 = 20;
+
 impl Game {
     fn populate_room(&mut self) {
         for slot in 0..4 {
@@ -116,7 +118,7 @@ impl Game {
         let mut game = Game {
             dungeon,
             slain: vec![],
-            health: 20,
+            health: INITIAL_HEALTH,
             room: EMPTY_ROOM,
             discard_count: 0,
             equipped: None,
