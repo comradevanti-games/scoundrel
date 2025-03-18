@@ -1,4 +1,4 @@
-use std::cmp;
+use std::{cmp, iter};
 
 use lazy_static::lazy_static;
 use rand::{Rng, seq::SliceRandom};
@@ -28,54 +28,14 @@ pub struct Game {
 
 lazy_static! {
     static ref INITIAL_DUNGEON: Vec<Card> = vec![
-        Rank::Ace.of(super::card::Suite::Clubs),
-        Rank::Two.of(super::card::Suite::Clubs),
-        Rank::Three.of(super::card::Suite::Clubs),
-        Rank::Four.of(super::card::Suite::Clubs),
-        Rank::Five.of(super::card::Suite::Clubs),
-        Rank::Six.of(super::card::Suite::Clubs),
-        Rank::Seven.of(super::card::Suite::Clubs),
-        Rank::Eight.of(super::card::Suite::Clubs),
-        Rank::Nine.of(super::card::Suite::Clubs),
-        Rank::Ten.of(super::card::Suite::Clubs),
-        Rank::Jack.of(super::card::Suite::Clubs),
-        Rank::Queen.of(super::card::Suite::Clubs),
-        Rank::King.of(super::card::Suite::Clubs),
-        Rank::Two.of(super::card::Suite::Diamonds),
-        Rank::Three.of(super::card::Suite::Diamonds),
-        Rank::Four.of(super::card::Suite::Diamonds),
-        Rank::Five.of(super::card::Suite::Diamonds),
-        Rank::Six.of(super::card::Suite::Diamonds),
-        Rank::Seven.of(super::card::Suite::Diamonds),
-        Rank::Eight.of(super::card::Suite::Diamonds),
-        Rank::Nine.of(super::card::Suite::Diamonds),
-        Rank::Ten.of(super::card::Suite::Diamonds),
-        Rank::Jack.of(super::card::Suite::Diamonds),
-        Rank::Queen.of(super::card::Suite::Diamonds),
-        Rank::King.of(super::card::Suite::Diamonds),
-        Rank::Ace.of(super::card::Suite::Spades),
-        Rank::Two.of(super::card::Suite::Spades),
-        Rank::Three.of(super::card::Suite::Spades),
-        Rank::Four.of(super::card::Suite::Spades),
-        Rank::Five.of(super::card::Suite::Spades),
-        Rank::Six.of(super::card::Suite::Spades),
-        Rank::Seven.of(super::card::Suite::Spades),
-        Rank::Eight.of(super::card::Suite::Spades),
-        Rank::Nine.of(super::card::Suite::Spades),
-        Rank::Ten.of(super::card::Suite::Spades),
-        Rank::Jack.of(super::card::Suite::Spades),
-        Rank::Queen.of(super::card::Suite::Spades),
-        Rank::King.of(super::card::Suite::Spades),
-        Rank::Two.of(super::card::Suite::Hearts),
-        Rank::Three.of(super::card::Suite::Hearts),
-        Rank::Four.of(super::card::Suite::Hearts),
-        Rank::Five.of(super::card::Suite::Hearts),
-        Rank::Six.of(super::card::Suite::Hearts),
-        Rank::Seven.of(super::card::Suite::Hearts),
-        Rank::Eight.of(super::card::Suite::Hearts),
-        Rank::Nine.of(super::card::Suite::Hearts),
-        Rank::Ten.of(super::card::Suite::Hearts),
-    ];
+        "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D", "10D", "JD", "QD", "KD", "AD", "2H", "3H",
+        "4H", "5H", "6H", "7H", "8H", "9H", "10H", "2C", "3C", "4C", "5C", "6C", "7C", "8C", "9C",
+        "10C", "JC", "QC", "KC", "AC", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S", "10S", "JS",
+        "QS", "KS", "AS",
+    ]
+    .iter()
+    .map(|s| s.parse().unwrap())
+    .collect();
 }
 
 impl Card {

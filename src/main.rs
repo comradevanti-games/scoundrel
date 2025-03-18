@@ -10,6 +10,7 @@ use ui::{
 extern crate termion;
 
 mod domain {
+    pub mod parse;
     pub mod card;
     pub mod game;
     pub mod pile;
