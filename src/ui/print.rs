@@ -68,12 +68,7 @@ fn print_empty_slot<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
     print_empty_slot_with_content(f, x, y, &"   ".to_string())
 }
 
-fn print_card_with_content<W: Write>(
-    f: &mut W,
-    x: u16,
-    y: u16,
-    content: &String,
-) -> io::Result<()> {
+fn print_card_with_content<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<()> {
     write!(f, "{}┌───┐", cursor::Goto(x, y))?;
     write!(f, "{}│    ", cursor::Goto(x, y + 1))?;
     write!(f, "{}{}", cursor::Goto(x + 1, y + 1), content)?;
@@ -83,7 +78,7 @@ fn print_card_with_content<W: Write>(
 }
 
 fn print_empty_card<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
-    print_card_with_content(f, x, y, &"".to_string())
+    print_card_with_content(f, x, y, "")
 }
 
 fn print_card<W: Write>(f: &mut W, x: u16, y: u16, card: &Card) -> io::Result<()> {
