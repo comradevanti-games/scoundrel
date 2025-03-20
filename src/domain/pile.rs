@@ -34,6 +34,7 @@ impl Pile {
         self.0.is_empty()
     }
 
+    #[cfg(test)]
     pub fn contains(&self, card: &Card) -> bool {
         self.0.contains(card)
     }
