@@ -1,5 +1,6 @@
 use std::io::{self, Write};
 
+use ansi_width::ansi_width;
 use termion::color::{self};
 use termion::{cursor, style};
 
@@ -59,6 +60,9 @@ fn print_empty_slot_with_content<W: Write>(
     y: u16,
     content: &String,
 ) -> io::Result<()> {
+    let len = ansi_width(content);
+    assert!(len <= 3);
+
     write!(f, "{}┌   ┐", cursor::Goto(x, y))?;
     write!(f, "{} {}", cursor::Goto(x, y + 1), content)?;
     write!(f, "{}└   ┘", cursor::Goto(x, y + 3))
@@ -69,6 +73,9 @@ fn print_empty_slot<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
 }
 
 fn print_card_with_content<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<()> {
+    let len = ansi_width(content);
+    assert!(len <= 3);
+
     write!(f, "{}┌───┐", cursor::Goto(x, y))?;
     write!(f, "{}│    ", cursor::Goto(x, y + 1))?;
     write!(f, "{}{}", cursor::Goto(x + 1, y + 1), content)?;
