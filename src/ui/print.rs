@@ -7,8 +7,6 @@ use termion::{cursor, style};
 use crate::domain::card::{Rank, Suite};
 use crate::domain::{card::Card, game::Game};
 
-extern crate termion;
-
 const HEART: char = '♥';
 
 const CLUBS: char = '♣';
@@ -54,34 +52,39 @@ fn make_card_text(card: &Card) -> String {
     )
 }
 
+pub fn print_at<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<()> {
+    write!(f, "{}{}", cursor::Goto(x, y), content)
+}
+
 fn print_empty_slot_with_content<W: Write>(
     f: &mut W,
     x: u16,
     y: u16,
-    content: &String,
+    content: &str,
 ) -> io::Result<()> {
     let len = ansi_width(content);
     assert!(len <= 3);
 
-    write!(f, "{}┌   ┐", cursor::Goto(x, y))?;
-    write!(f, "{} {}", cursor::Goto(x, y + 1), content)?;
-    write!(f, "{}└   ┘", cursor::Goto(x, y + 3))
+    print_at(f, x, y, "┌   ┐")?;
+    print_at(f, x, y + 1, "     ")?;
+    print_at(f, x + 1, y + 1, content)?;
+    print_at(f, x, y + 2, "     ")?;
+    print_at(f, x, y + 3, "└   ┘")
 }
 
 fn print_empty_slot<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
-    print_empty_slot_with_content(f, x, y, &"   ".to_string())
+    print_empty_slot_with_content(f, x, y, "")
 }
 
 fn print_card_with_content<W: Write>(f: &mut W, x: u16, y: u16, content: &str) -> io::Result<()> {
     let len = ansi_width(content);
     assert!(len <= 3);
 
-    write!(f, "{}┌───┐", cursor::Goto(x, y))?;
-    write!(f, "{}│    ", cursor::Goto(x, y + 1))?;
-    write!(f, "{}{}", cursor::Goto(x + 1, y + 1), content)?;
-    write!(f, "{}│", cursor::Goto(x + 4, y + 1))?;
-    write!(f, "{}│   │", cursor::Goto(x, y + 2))?;
-    write!(f, "{}└───┘", cursor::Goto(x, y + 3))
+    print_at(f, x, y, "┌───┐")?;
+    print_at(f, x, y + 1, "│   │")?;
+    print_at(f, x + 1, y + 1, content)?;
+    print_at(f, x, y + 2, "│   │")?;
+    print_at(f, x, y + 3, "└───┘")
 }
 
 fn print_empty_card<W: Write>(f: &mut W, x: u16, y: u16) -> io::Result<()> {
@@ -135,7 +138,7 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
         print_maybe_card(f, x, y, card.as_ref())?;
 
         if is_selected {
-            write!(f, "{}▀▀▀▀▀", cursor::Goto(x, 6))?;
+            print_at(f, x, 6, "▀▀▀▀▀")?;
         }
     }
 
@@ -148,19 +151,21 @@ pub fn print_game<W: Write>(f: &mut W, game: &Game, selected_slot: usize) -> io:
         print_card(f, x, 7, card)?;
     }
 
-    write!(f, "{}Health: {}", cursor::Goto(2, 12), &game.health)?;
-    write!(f, "{}{}", cursor::Goto(0, 20), CONTROLS)?;
-    write!(f, "{}{}", cursor::Goto(0, 26), HOW_TO_PLAY)
+    print_at(f, 2, 12, &format!("Health: {}", &game.health))?;
+    print_at(f, 0, 20, CONTROLS)?;
+    print_at(f, 0, 26, HOW_TO_PLAY)?;
+
+    Ok(())
 }
 
 static GAME_OVER: &str = "GAME OVER";
 
 pub fn print_game_over<W: Write>(f: &mut W) -> io::Result<()> {
-    write!(f, "{}{}", cursor::Goto(5, 5), GAME_OVER)
+    print_at(f, 5, 5, GAME_OVER)
 }
 
 static WIN: &str = "YOU WIN";
 
 pub fn print_win<W: Write>(f: &mut W) -> io::Result<()> {
-    write!(f, "{}{}", cursor::Goto(5, 5), WIN)
+    print_at(f, 5, 5, WIN)
 }
