@@ -10,9 +10,9 @@ use ui::{
 extern crate termion;
 
 mod domain {
-    pub mod parse;
     pub mod card;
     pub mod game;
+    pub mod parse;
     pub mod pile;
     pub mod room;
 }
@@ -32,6 +32,7 @@ fn main() {
     let mut game = Game::start_new(&mut rng);
     let mut selected_slot = 0_usize;
 
+    write!(stdout, "{}", termion::clear::All).unwrap();
     print_game(&mut stdout, &game, selected_slot).unwrap();
     stdout.flush().unwrap();
 
